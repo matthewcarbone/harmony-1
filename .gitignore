@@ -1,0 +1,11 @@
+# python stuff
+*.pyc
+
+# all SLURM and job data
+job_data/
+*.sbatch
+submit_all.sh
+
+# all parameter files except the example
+*.yml
+!example.yml

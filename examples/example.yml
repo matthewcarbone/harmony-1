@@ -1,0 +1,58 @@
+
+# options pertaining to the SLURM script
+# all fields required
+slurm:
+    ACCT: '12345'
+    PARTITION: 'all_mine'
+    MAIL: 'foo@bar.edu'
+    PROCS_PER_NODE: 8
+    GPU: False
+    SORT_BY: 'epochs'
+
+# number of runs per identical model, to help counteract the effect of
+# random initialization of the network-- run results are averaged after
+# this option is an integer, not a list
+mruns: 10
+
+globals:
+    epochs: [100, 200, 250]         # number of epochs to train on/ multirun
+    final_activation: ['softmax']   # last layer activation function
+    batch_size : [32]               # HIGHLY RECOMMENDED <= 32
+    loss: ['mae']
+    optimizer : ['adam']
+
+# convolutional neural network
+cnn:
+    1:
+        f: [1, 2, 3]  # filters
+        k: [4, 5, 6]  # kernel_size
+        s: [7, 8 ,9]  # strides
+        p: [1, 5, 9]  # pool size
+        a: ['relu']   # activation function
+    2:
+        f: [10, 20, 30]  # filters
+        k: [4, 5, 6]  # kernel_size
+        s: [7, 8 ,9]  # strides
+        p: [1, 5, 9]  # pool size
+        a: ['relu']   # activation function
+
+# note, if you don't want to use a cnn at all, leave the parameter there, but
+# leave it blank:
+# cnn:
+
+# layers of the multi-layer perceptron after the cnn
+mlp:
+    # layer 0 is special since it connects upstream to either the CNN or
+    # to the input, and therefore must be included with non-zero n
+    0:
+        n: [10]
+        a: ['relu']
+        d: [0.0]
+    1:
+        n: [0, 10, 20,]   # number of neurons in the layer
+        a: ['relu']       # activation function
+        d: [0, 0.1, 0.2]  # dropout
+    2:
+        n: [0, 10, 20,]
+        a: ['tanh', 'relu']
+        d: [0, 0.1, 0.2]
